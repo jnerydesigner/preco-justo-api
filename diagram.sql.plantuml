@@ -1,0 +1,50 @@
+@startuml diagrama da aplicação em sql
+
+entity "customers" as Users {
+    + id : UUID [PK]
+    --
+    name : VARCHAR(100)
+    email : VARCHAR(150)
+    phone : VARCHAR(20)
+    eligible_discount : BOOLEAN [DEFAULT FALSE]
+    created_at : TIMESTAMP
+    updated_at : TIMESTAMP
+}
+
+entity "ducks" as Ducks {
+    + id : UUID [PK]
+    --
+    name : VARCHAR(100)
+    is_mother : BOOLEAN
+    mother_id : UUID [FK]
+    created_at : TIMESTAMP
+    updated_at : TIMESTAMP
+}
+
+entity "orders" as Order{
+    + id : UUID [PK]
+    --
+    customer_id : UUID [FK]
+    total_price : DECIMAL(10,2)
+    status : VARCHAR(50)
+    created_at : TIMESTAMP
+    updated_at : TIMESTAMP
+}
+
+entity "items" as Items {
+    + id : UUID [PK]
+    --
+    order_id : UUID [FK]
+    duck_id : UUID [FK]
+    quantity : INT
+    price : DECIMAL(10,2)
+    created_at : TIMESTAMP
+    updated_at : TIMESTAMP
+}
+
+Users ||--o{ Order : "1:N"
+Ducks ||--o{ Ducks : "1:N"
+Order ||--o{ Items : "1:N"
+Ducks ||--o{ Items : "1:N"
+
+@enduml
