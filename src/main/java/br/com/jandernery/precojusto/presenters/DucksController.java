@@ -11,6 +11,7 @@ import br.com.jandernery.precojusto.application.dto.DuckDTO;
 import br.com.jandernery.precojusto.application.dto.DuckRecord;
 import br.com.jandernery.precojusto.application.services.DuckService;
 import br.com.jandernery.precojusto.domain.entities.DuckEntity;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/ducks")
@@ -24,9 +25,17 @@ public class DucksController {
         duckService.createDuck(duck);
     }
 
+    // ResponseEntity<List<DuckEntity>>
     @GetMapping
-    public ResponseEntity<List<DuckEntity>> findAll() {
-        return ResponseEntity.ok(duckService.findAll());
+    public void findAll(HttpServletResponse response) throws Exception {
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=ducks.xls";
+        response.setHeader(headerKey, headerValue);
+
+        duckService.findAllDucks(response);
+
+        // return ResponseEntity.ok(duckService.findAll());
     }
 
     @GetMapping("/duck/{duckId}")
